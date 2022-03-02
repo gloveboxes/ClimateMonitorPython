@@ -18,6 +18,7 @@ async def main():
     deviceId = os.environ.get('deviceId')
     derivedKey = os.environ.get('derivedKey')
     owm_key = os.environ.get('owmKey')
+    air_visual_key = os.environ.get('air_visual_key')
 
     if idScope is None or deviceId is None or derivedKey is None:
         sys.exit(1)
@@ -29,7 +30,7 @@ async def main():
     device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
     await device_client.connect()
 
-    sensor = Sensor(owm_key)
+    sensor = Sensor(owm_key, air_visual_key)
 
     while True:
         try:

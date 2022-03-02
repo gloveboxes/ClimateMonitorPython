@@ -5,7 +5,7 @@ import time
 
 class Sensor():
 
-    def __init__(self, owm_key):
+    def __init__(self, owm_key, air_visual_key):
         self.telemetry = {}
 
         response = requests.get("https://get.geojs.io/v1/ip/geo.json")
@@ -24,7 +24,7 @@ class Sensor():
 
         self.weather_url = "http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={owm_key}&units=metric".format(lat = self.lat, lng = self.lng, owm_key = owm_key)
         self.pollution_url = "http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lng}&appid={owm_key}".format(lat = self.lat, lng = self.lng, owm_key = owm_key)
-
+        self.air_visual_url = "http://api.airvisual.com/v2/nearest_city?lat={lat}&lon={lng}&key={air_visual_key}".format(lat = self.lat, lng = self.lng, air_visual_key = air_visual_key)
         self.telemetry = None
         self.last_request_time = 0
 
@@ -47,6 +47,9 @@ class Sensor():
         response = requests.get(self.pollution_url)
         pollution = response.json() 
 
+        response = requests.get(self.air_visual_url)
+        air_visual = response.json() 
+
         self.telemetry = {
             "city" : weather['name'],
             "latitude" : self.lat,
@@ -55,7 +58,7 @@ class Sensor():
             "humidity" : weather['main']['humidity'],
             "pressure" : weather['main']['pressure'],
             "windspeed" : weather['wind']['speed'],
-            "aqi" : pollution['list'][0]['main']['aqi'],
+            "aqi" : air_visual['data']['current']['pollution']['aqius'],
             "co" : pollution['list'][0]['components']['co'],
             "no" : pollution['list'][0]['components']['no'],
             "no2" : pollution['list'][0]['components']['no2'],
