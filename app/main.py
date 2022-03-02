@@ -20,7 +20,7 @@ async def main():
     owm_key = os.environ.get('owmKey')
     air_visual_key = os.environ.get('air_visual_key')
 
-    if idScope is None or deviceId is None or derivedKey is None:
+    if idScope is None or deviceId is None or derivedKey is None or owm_key is None or air_visual_key is None:
         sys.exit(1)
 
     dps = Device(idScope, deviceId, derivedKey)
